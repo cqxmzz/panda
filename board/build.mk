@@ -74,8 +74,8 @@ obj/$(PROJ_NAME).bin: obj/$(STARTUP_FILE).o obj/main.$(PROJ_NAME).o
 	$(CC) -Wl,--section-start,.isr_vector=0x8004000 $(CFLAGS) -o obj/$(PROJ_NAME).elf $^
 	$(OBJCOPY) -v -O binary obj/$(PROJ_NAME).elf obj/code.bin
 	SETLEN=1 ../crypto/sign.py obj/code.bin $@ $(CERT)
-	@BINSIZE=$$(du -b "obj/$(PROJ_NAME).bin" | cut -f 1) ; \
-	if [ $$BINSIZE -ge 49152 ]; then echo "ERROR obj/$(PROJ_NAME).bin is too big!"; exit 1; fi;
+	@BINSIZE=$$(du "obj/$(PROJ_NAME).bin" | cut -f 1) ; \
+	if [ $$BINSIZE -ge 96 ]; then echo "ERROR obj/$(PROJ_NAME).bin is too big!"; exit 1; fi;
 
 obj/bootstub.$(PROJ_NAME).bin: obj/$(STARTUP_FILE).o obj/bootstub.$(PROJ_NAME).o obj/sha.$(PROJ_NAME).o obj/rsa.$(PROJ_NAME).o
 	$(CC) $(CFLAGS) -o obj/bootstub.$(PROJ_NAME).elf $^
