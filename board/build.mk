@@ -43,7 +43,7 @@ flash: obj/$(PROJ_NAME).bin
 	PYTHONPATH=../ python3 -c "from python import Panda; Panda().flash('obj/$(PROJ_NAME).bin')"
 
 ota: obj/$(PROJ_NAME).bin
-	curl http://192.168.0.10/stupdate --upload-file $<
+	curl http://192.168.0.54/stupdate --upload-file $<
 
 bin: obj/$(PROJ_NAME).bin
 
