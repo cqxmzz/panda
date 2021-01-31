@@ -742,8 +742,15 @@ void TIM1_BRK_TIM9_IRQ_Handler(void) {
       }
 
       // enter CDP mode when car starts to ensure we are charging a turned off EON
-      if (check_started() && (usb_power_mode != USB_POWER_CDP)) {
-        current_board->set_usb_power_mode(USB_POWER_CDP);
+      if (check_started()) {
+        off_cnt = 0U;
+        if (usb_power_mode != USB_POWER_CDP) {
+          current_board->set_usb_power_mode(USB_POWER_CDP);
+        }
+      }
+
+      if (off_cnt > 7 * 24 * 3600) {
+        current_board->set_phone_power(false);
       }
       #endif
 
@@ -759,6 +766,7 @@ void TIM1_BRK_TIM9_IRQ_Handler(void) {
       uptime_cnt += 1U;
       safety_mode_cnt += 1U;
       ignition_can_cnt += 1U;
+      off_cnt += 1U;
 
       // synchronous safety check
       safety_tick(current_hooks);
